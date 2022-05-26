@@ -1,0 +1,46 @@
+NOC,Region,Country,Year,Season,Games
+ANZ,Australia,Australia,1956,Summer,1956 Summer
+ANZ,Australia,Australia,2000,Summer,2000 Summer
+AUS,Australia,Australia,1956,Summer,1956 Summer
+AUS,Australia,Australia,2000,Summer,2000 Summer
+AUT,Austria,Austria,1964,Winter,1964 Winter
+AUT,Austria,Austria,1976,Winter,1976 Winter
+BRA,Brazil,Brazil,2016,Summer,2016 Summer
+CAN,Canada,Canada,1976,Summer,1976 Summer
+CAN,Canada,Canada,1988,Winter,1988 Winter
+CAN,Canada,Canada,2010,Winter,2010 Winter
+NFL,Canada,Canada,1976,Summer,1976 Summer
+NFL,Canada,Canada,1988,Winter,1988 Winter
+NFL,Canada,Canada,2010,Winter,2010 Winter
+CHN,China,China,2008,Summer,2008 Summer
+HKG,China,China,2008,Summer,2008 Summer
+CRT,Greece,Greece,2004,Summer,2004 Summer
+GRE,Greece,Greece,2004,Summer,2004 Summer
+ESP,Spain,Spain,1992,Summer,1992 Summer
+EUN,Russia,Russia,2014,Winter,2014 Winter
+RUS,Russia,Russia,2014,Winter,2014 Winter
+FIN,Finland,Finland,1952,Summer,1952 Summer
+FRA,France,France,1968,Winter,1968 Winter
+FRA,France,France,1992,Winter,1992 Winter
+FRG,West Germany,West Germany,1972,Summer,1972 Summer
+GBR,United Kingdom,United Kingdom,1948,Summer,1948 Summer
+GBR,United Kingdom,United Kingdom,2012,Summer,2012 Summer
+ITA,Italy,Italy,1956,Winter,1956 Winter
+ITA,Italy,Italy,1960,Summer,1960 Summer
+ITA,Italy,Italy,2006,Winter,2006 Winter
+JPN,Japan,Japan,1964,Summer,1964 Summer
+JPN,Japan,Japan,1972,Winter,1972 Winter
+JPN,Japan,Japan,1998,Winter,1998 Winter
+KOR,South Korea,South Korea,1988,Summer,1988 Summer
+KOR,South Korea,South Korea,2018,Winter,2018 Winter
+MEX,Mexico,Mexico,1968,Summer,1968 Summer
+NOR,Norway,Norway,1952,Winter,1952 Winter
+NOR,Norway,Norway,1994,Winter,1994 Winter
+SUI,Switzerland,Switzerland,1948,Winter,1948 Winter
+URS,Soviet Union,Soviet Union,1980,Summer,1980 Summer
+USA,United States,United States,1960,Winter,1960 Winter
+USA,United States,United States,1980,Winter,1980 Winter
+USA,United States,United States,1984,Summer,1984 Summer
+USA,United States,United States,1996,Summer,1996 Summer
+USA,United States,United States,2002,Winter,2002 Winter
+YUG,Yugoslavia,Yugoslavia,1984,Winter,1984 Winter
