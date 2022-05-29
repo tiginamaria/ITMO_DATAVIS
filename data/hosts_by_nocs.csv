@@ -1,0 +1,45 @@
+NOC,Region,City,Country,Continent,Year,Opening Ceremony,Closing Ceremony,Season,Games
+ANZ,Australia,Melbourne,Australia,Oceania,1956,November 22,December 8,Summer,1956 Summer
+ANZ,Australia,Sydney,Australia,Oceania,2000,September 15,October 1,Summer,2000 Summer
+AUS,Australia,Melbourne,Australia,Oceania,1956,November 22,December 8,Summer,1956 Summer
+AUS,Australia,Sydney,Australia,Oceania,2000,September 15,October 1,Summer,2000 Summer
+AUT,Austria,Innsbruck,Austria,Europe,1964,January 29,February 9,Winter,1964 Winter
+AUT,Austria,Innsbruck,Austria,Europe,1976,February 4,February 15,Winter,1976 Winter
+BRA,Brazil,Rio de Janeiro,Brazil,South America,2016,August 5,August 21,Summer,2016 Summer
+CAN,Canada,Montreal,Canada,North America,1976,July 17,August 1,Summer,1976 Summer
+CAN,Canada,Calgary,Canada,North America,1988,February 13,February 28,Winter,1988 Winter
+CAN,Canada,Vancouver,Canada,North America,2010,February 12,February 28,Winter,2010 Winter
+NFL,Canada,Montreal,Canada,North America,1976,July 17,August 1,Summer,1976 Summer
+NFL,Canada,Calgary,Canada,North America,1988,February 13,February 28,Winter,1988 Winter
+NFL,Canada,Vancouver,Canada,North America,2010,February 12,February 28,Winter,2010 Winter
+CHN,China,Beijing,China,Asia,2008,August 8,August 24,Summer,2008 Summer
+HKG,China,Beijing,China,Asia,2008,August 8,August 24,Summer,2008 Summer
+CRT,Greece,Athens,Greece,Europe,2004,August 13,August 29,Summer,2004 Summer
+GRE,Greece,Athens,Greece,Europe,2004,August 13,August 29,Summer,2004 Summer
+ESP,Spain,Barcelona,Spain,Europe,1992,July 25,August 9,Summer,1992 Summer
+EUN,Russia,Sochi,Russia,Europe,2014,February 7,February 23,Winter,2014 Winter
+RUS,Russia,Sochi,Russia,Europe,2014,February 7,February 23,Winter,2014 Winter
+FIN,Finland,Helsinki,Finland,Europe,1952,July 19,August 3,Summer,1952 Summer
+FRA,France,Grenoble,France,Europe,1968,February 6,February 18,Winter,1968 Winter
+FRA,France,Albertville,France,Europe,1992,February 8,February 23,Winter,1992 Winter
+GBR,United Kingdom,London,United Kingdom,Europe,1948,July 29,August 14,Summer,1948 Summer
+GBR,United Kingdom,London,United Kingdom,Europe,2012,July 27,August 12,Summer,2012 Summer
+ITA,Italy,Cortina d'Ampezzo,Italy,Europe,1956,January 26,February 5,Winter,1956 Winter
+ITA,Italy,Rome,Italy,Europe,1960,August 25,September 11,Summer,1960 Summer
+ITA,Italy,Turin,Italy,Europe,2006,February 10,February 26,Winter,2006 Winter
+JPN,Japan,Tokyo,Japan,Asia,1964,October 10,October 24,Summer,1964 Summer
+JPN,Japan,Sapporo,Japan,Asia,1972,February 3,February 13,Winter,1972 Winter
+JPN,Japan,Nagano,Japan,Asia,1998,February 7,February 22,Winter,1998 Winter
+KOR,South Korea,Seoul,South Korea,Asia,1988,September 17,October 2,Summer,1988 Summer
+KOR,South Korea,Pyeongchang,South Korea,Asia,2018,February 9,February 25,Winter,2018 Winter
+MEX,Mexico,Mexico City,Mexico,North America,1968,October 12,October 27,Summer,1968 Summer
+NOR,Norway,Oslo,Norway,Europe,1952,February 14,February 25,Winter,1952 Winter
+NOR,Norway,Lillehammer,Norway,Europe,1994,February 12,February 27,Winter,1994 Winter
+SUI,Switzerland,St. Moritz,Switzerland,Europe,1948,January 30,February 8,Winter,1948 Winter
+URS,Soviet Union,Moscow,Soviet Union,Europe,1980,July 19,August 3,Summer,1980 Summer
+USA,United States,Squaw Valley,United States,North America,1960,February 18,February 28,Winter,1960 Winter
+USA,United States,Lake Placid,United States,North America,1980,February 12,February 24,Winter,1980 Winter
+USA,United States,Los Angeles,United States,North America,1984,July 28,August 12,Summer,1984 Summer
+USA,United States,Atlanta,United States,North America,1996,July 19,August 4,Summer,1996 Summer
+USA,United States,Salt Lake City,United States,North America,2002,February 8,February 24,Winter,2002 Winter
+YUG,Yugoslavia,Sarajevo,Yugoslavia,Europe,1984,February 7,February 19,Winter,1984 Winter
