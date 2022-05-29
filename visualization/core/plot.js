@@ -4,31 +4,56 @@ const V_MARGIN = 100
 let svg;
 let width, height;
 let xScale, yScale;
+let color;
 
-function initPlot(initSvg) {
-    svg = initSvg;
-
+export function setSvg(pltSvg) {
+    svg = pltSvg;
     width = svg.attr("width") - 2 * H_MARGIN;
     height = svg.attr("height") - 2 * V_MARGIN;
+}
+
+export function drawData(data) {
+    console.log(data);
+    drawAxis(data);
+    drawLegend(data);
+    drawLine(data)
+}
+
+function drawAxis(data) {
+
+    const dateRange = [
+        d3.min(data, function (d) {
+            return d[0];
+        }),
+        d3.max(data, function (d) {
+            return d[0];
+        }),
+    ]
+
+    const medalRange = [
+        Math.max(d3.min(data, function (d) {
+            return d[1];
+        }) - 0.05, 0),
+        parseFloat(d3.max(data, function (d) {
+            return d[1];
+        })) + 0.05
+    ]
+    console.log('medal', medalRange)
 
     xScale = d3.scaleTime()
-        .domain([d3.timeParse("%Y")("1944"), d3.timeParse("%Y")("2018")])
+        .domain(dateRange)
         .range([0, width]);
 
     yScale = d3.scaleLinear()
-        .domain([0, 0.3])
+        .domain(medalRange)
         .range([height, 0]);
 
-    drawAxis();
-}
-
-function drawAxis() {
     // Title
     svg.append('text')
         .attr('x', width / 2 + H_MARGIN)
-        .attr('y', V_MARGIN)
+        .attr('y', V_MARGIN / 1.5)
         .attr('text-anchor', 'middle')
-        .style('font-family', 'Helvetica')
+        .style('font-family', 'Arial')
         .style('font-size', 20)
         .text('Line Chart');
 
@@ -37,25 +62,24 @@ function drawAxis() {
         .attr('x', width / 2 + H_MARGIN)
         .attr('y', height + V_MARGIN + 50)
         .attr('text-anchor', 'middle')
-        .style('font-family', 'Helvetica')
+        .style('font-family', 'Arial')
         .style('font-size', 12)
         .text('Year');
 
     // Y label
     svg.append('text')
-        .attr('x', - height / 2 - V_MARGIN)
+        .attr('x', -height / 2 - V_MARGIN)
         .attr('y', 50)
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
-        .style('font-family', 'Helvetica')
+        .style('font-family', 'Arial')
         .style('font-size', 12)
         .text('Medals (%)');
 
     // X axis
-    const xAxis = d3.axisBottom(xScale).ticks(d3.timeYear.every(4))
     svg.append("g")
         .attr("transform", `translate(${H_MARGIN}, ${height + V_MARGIN})`)
-        .call(xAxis)
+        .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(4)))
         .selectAll("text")
         .attr("y", 10)
         .attr("x", 5)
@@ -64,54 +88,89 @@ function drawAxis() {
         .style("text-anchor", "start");
 
     // Y axis
-    const yAxis = d3.axisLeft(yScale)
     svg.append("g")
         .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .call(yAxis);
+        .call(d3.axisLeft(yScale));
 
     // X axis grid
-    const xAxisGrid = d3.axisBottom(xScale).ticks(d3.timeYear.every(4)).tickSize(-height).tickFormat('');
     svg.append('g')
         .attr('class', 'axis-grid')
         .attr("transform", `translate(${H_MARGIN}, ${height + V_MARGIN})`)
-        .call(xAxisGrid);
+        .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(4)).tickSize(-height).tickFormat(''));
 
     // Y axis grid
-    const yAxisGrid = d3.axisLeft(yScale).tickSize(-width).tickFormat('');
     svg.append('g')
         .attr('class', 'axis-grid')
         .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .call(yAxisGrid);
+        .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(''));
 
 }
 
+function drawLegend(data) {
+    const nocsRange = ['USA', 'JPN', 'ITA']
+
+    color = d3.scaleOrdinal()
+        .domain(nocsRange)
+        .range(d3.schemeSet1)
+
+    var legend = svg.selectAll(".legend")
+        .data(nocsRange)
+        .enter()
+        .append("g")
+        .attr("class", "legend")
+        .attr("transform", function (d, i) {
+            return "translate(" + width + "," + (i * 15) + ")";
+        });
+
+    legend.append("text").text(function (d) {
+        return d;
+    })
+        .style('font-family', 'Arial')
+        .style('font-size', 12)
+        .attr("transform", "translate(40, 155)");
+
+    legend.append("rect")
+        .attr("fill", function (d, i) {
+            return color(d);
+        })
+        .attr("transform", "translate(0, 150)")
+        .attr("width", 30)
+        .attr("height", 3);
+}
 
 function drawLine(data) {
     console.log(data)
+    const dataGroups = d3.group(data, d => d[2]);
+    console.log(dataGroups)
 
     // Line Generator
     const line = d3.line()
         .x(function (d) {
+            console.log(d[0]);
             return xScale(d[0]);
         })
         .y(function (d) {
+            console.log(d[1]);
             return yScale(d[1]);
         })
         .curve(d3.curveMonotoneX)
 
-    // Line
-    svg.append("path")
-        .datum(data)
-        .attr("class", "line")
-        .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .attr("d", line)
-        .style("fill", "none")
-        .style("stroke", "#CC0000")
-        .style("stroke-width", "2");
+    // Line for each NOC
+    dataGroups.forEach(function (d, g) {
+        console.log(g, d)
+        svg.append("path")
+            .datum(d)
+            .attr("class", "line")
+            .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
+            .attr("d", line)
+            .attr("stroke", color(g))
+            .style("fill", "none")
+            .style("stroke-width", "2")
+    });
 
     // Line Dots
-    svg.append('g')
-        .selectAll("dot")
+    svg.selectAll(".circle")
+        .append("g")
         .data(data)
         .enter()
         .append("circle")
@@ -123,7 +182,8 @@ function drawLine(data) {
         })
         .attr("r", 5)
         .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .style("fill", "#CC0000");
+        .style("fill", function (d) {
+            console.log(d[2])
+            return color(d[2]);
+        });
 }
-
-export {initPlot, drawLine}

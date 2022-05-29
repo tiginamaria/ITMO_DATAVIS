@@ -1,5 +1,5 @@
 import {selectData, preloadData} from "./core/data.js";
-import {initPlot, drawLine} from "./core/plot.js";
+import {drawData, setSvg} from "./core/plot.js";
 
 const body = d3.select("body");
 
@@ -41,10 +41,17 @@ const svg = canvas.append('svg')
     .attr("width", width)
     .attr("height", height);
 
-initPlot(svg);
+setSvg(svg)
 showMedalsToYear();
 
+function prepareData(data) {
+    return data.map(function (d) {
+        return [d.Year, d.Medals, d.NOC]
+    })
+}
+
 function showMedalsToYear() {
-    const data = selectData();
-    drawLine(data);
+
+    const data = prepareData(selectData());
+    drawData(data);
 }
