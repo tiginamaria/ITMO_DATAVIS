@@ -1,28 +1,35 @@
-const H_MARGIN = 100
-const V_MARGIN = 100
+import {color} from "./styles.js";
+
+const H_MARGIN = 80
+const V_MARGIN = 50
 
 let svg;
 let width, height;
 let xScale, yScale;
-let color;
 
-export function setSvg(pltSvg) {
+export function initPlot(pltSvg) {
+    console.log('initPlot')
     svg = pltSvg;
+    svg.selectAll("*").remove();
+
     width = svg.attr("width") - 2 * H_MARGIN;
     height = svg.attr("height") - 2 * V_MARGIN;
+    drawAxis()
 }
 
 export function drawData(medalsData, hostsData) {
-    console.log('medals', medalsData);
-    console.log('hosts', hostsData);
-
+    svg.selectAll("*").remove();
     drawAxis(medalsData);
     drawLegend(medalsData);
     drawLine(medalsData);
     drawPulsingCircles(hostsData);
 }
 
-function drawAxis(data) {
+function drawAxis(data = []) {
+
+    if (data.length === 0) {
+        data = [[d3.timeParse("%Y")("1944"), 0.0], [d3.timeParse("%Y")("2018"), 0.4]]
+    }
 
     const dateRange = [
         d3.min(data, function (d) {
@@ -41,7 +48,7 @@ function drawAxis(data) {
             return d[1];
         })) + 0.05
     ]
-    console.log('medal', medalRange)
+    console.log('axis', dateRange, medalRange)
 
     xScale = d3.scaleTime()
         .domain(dateRange)
@@ -50,15 +57,6 @@ function drawAxis(data) {
     yScale = d3.scaleLinear()
         .domain(medalRange)
         .range([height, 0]);
-
-    // Title
-    svg.append('text')
-        .attr('x', width / 2 + H_MARGIN)
-        .attr('y', V_MARGIN / 1.5)
-        .attr('text-anchor', 'middle')
-        .style('font-family', 'Arial')
-        .style('font-size', 20)
-        .text('Line Chart');
 
     // X label
     svg.append('text')
@@ -72,12 +70,24 @@ function drawAxis(data) {
     // Y label
     svg.append('text')
         .attr('x', -height / 2 - V_MARGIN)
-        .attr('y', 50)
+        .attr('y', H_MARGIN - 50)
         .attr('text-anchor', 'middle')
         .attr('transform', 'rotate(-90)')
         .style('font-family', 'Arial')
         .style('font-size', 12)
         .text('Medals (%)');
+
+    // X axis grid
+    svg.append('g')
+        .attr('class', 'axis-grid')
+        .attr("transform", `translate(${H_MARGIN}, ${height + V_MARGIN})`)
+        .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(4)).tickSize(-height).tickFormat(''));
+
+    // Y axis grid
+    svg.append('g')
+        .attr('class', 'axis-grid')
+        .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
+        .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(''));
 
     // X axis
     svg.append("g")
@@ -94,27 +104,13 @@ function drawAxis(data) {
     svg.append("g")
         .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
         .call(d3.axisLeft(yScale));
-
-    // X axis grid
-    svg.append('g')
-        .attr('class', 'axis-grid')
-        .attr("transform", `translate(${H_MARGIN}, ${height + V_MARGIN})`)
-        .call(d3.axisBottom(xScale).ticks(d3.timeYear.every(4)).tickSize(-height).tickFormat(''));
-
-    // Y axis grid
-    svg.append('g')
-        .attr('class', 'axis-grid')
-        .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .call(d3.axisLeft(yScale).tickSize(-width).tickFormat(''));
-
 }
 
 function drawLegend(data) {
-    const nocsRange = ['USA', 'JPN', 'ITA']
 
-    color = d3.scaleOrdinal()
-        .domain(nocsRange)
-        .range(d3.schemeSet1)
+    const nocsRange = data
+        .map(d => d[2])
+        .filter((value, index, self) => self.indexOf(value) === index)
 
     const legend = svg.selectAll(".legend")
         .data(nocsRange)
@@ -122,7 +118,7 @@ function drawLegend(data) {
         .append("g")
         .attr("class", "legend")
         .attr("transform", function (d, i) {
-            return "translate(" + width + "," + (i * 15) + ")";
+            return "translate(" + width + "," + (10 + i * 15) + ")";
         });
 
     legend.append("text").text(function (d) {
@@ -130,18 +126,28 @@ function drawLegend(data) {
     })
         .style('font-family', 'Arial')
         .style('font-size', 12)
-        .attr("transform", "translate(40, 155)");
+        .attr("transform", "translate(40, 55)");
 
     legend.append("rect")
-        .attr("fill", function (d, i) {
+        .attr("id", function (d) {
+            return d[2];
+        })
+        .attr("transform", "translate(0, 50)")
+        .attr("width", 30)
+        .attr("height", 5)
+        .style("fill", function (d, i) {
             return color(d);
         })
-        .attr("transform", "translate(0, 150)")
-        .attr("width", 30)
-        .attr("height", 3);
+        .style('fill-opacity', 0.5)
+        .style('stroke', function (d, i) {
+            return color(d);
+        })
+        .style('stroke-opacity', 0.5)
 }
 
 function drawPulsingCircles(data) {
+
+    console.log('drawPulsingCircles', data)
 
     data.forEach(function (d) {
         let circle = svg.append("circle")
@@ -158,7 +164,6 @@ function drawPulsingCircles(data) {
     })
 
     data.forEach(function (d) {
-        console.log('text', d);
         svg.append("text")
             .attr("x", xScale(d[0]) + 10)
             .attr("y", yScale(d[1]) - 10)
@@ -227,7 +232,6 @@ function drawLine(data) {
 
     // Line for each NOC
     dataGroups.forEach(function (d, g) {
-        console.log(g, d)
         svg.append("path")
             .datum(d)
             .attr("class", "line")
@@ -236,23 +240,23 @@ function drawLine(data) {
             })
             .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
             .attr("d", line)
-            .attr("stroke", color(g))
+            .style("stroke", color(g))
             .style("fill", "none")
             .style("stroke-width", "4")
-            .attr('stroke-opacity', 0.5)
+            .style('stroke-opacity', 0.5)
             .on("mouseover", function (d, i) {
                 const id = d3.select(this).attr('id')
                 d3.selectAll("#" + id).transition()
                     .duration('50')
-                    .attr('stroke-opacity', 1)
-                    .attr('fill-opacity', 1);
+                    .style('stroke-opacity', 1)
+                    .style('fill-opacity', 1);
             })
             .on("mouseout", function (d, i) {
                 const id = d3.select(this).attr('id')
                 d3.selectAll("#" + id).transition()
                     .duration('50')
-                    .attr('stroke-opacity', 0.5)
-                    .attr('fill-opacity', 0.5);
+                    .style('stroke-opacity', 0.5)
+                    .style('fill-opacity', 0.5);
             })
 
     });
