@@ -1,4 +1,4 @@
-import {selectData, preloadData} from "./core/data.js";
+import {selectMedalsData, selectHostsData, preloadData} from "./core/data.js";
 import {drawData, setSvg} from "./core/plot.js";
 
 const body = d3.select("body");
@@ -44,14 +44,26 @@ const svg = canvas.append('svg')
 setSvg(svg)
 showMedalsToYear();
 
-function prepareData(data) {
+function prepareMedalsData(data) {
     return data.map(function (d) {
-        return [d.Year, d.Medals, d.NOC]
+        return [d.Year, d.Medals, d.NOC];
+    })
+}
+
+function prepareHostsData(medalsData, hostsData) {
+    const groupedMedalsData = d3.group(medalsData, d => d.NOC, d => d.Year, d => d.Season);
+
+    return hostsData.map(function (d) {
+        const hostResults = groupedMedalsData.get(d.NOC).get(d.Year).get(d.Season)[0]
+        return [hostResults.Year, hostResults.Medals, hostResults.NOC, d.Region, d.City];
     })
 }
 
 function showMedalsToYear() {
-
-    const data = prepareData(selectData());
-    drawData(data);
+    const medalsData = selectMedalsData();
+    const preparedMedalsData = prepareMedalsData(medalsData);
+    const hostsData = selectHostsData();
+    const preparedHostsData = prepareHostsData(medalsData, hostsData);
+    console.log('hosts', preparedHostsData)
+    drawData(preparedMedalsData, preparedHostsData);
 }

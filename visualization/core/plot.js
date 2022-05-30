@@ -12,11 +12,14 @@ export function setSvg(pltSvg) {
     height = svg.attr("height") - 2 * V_MARGIN;
 }
 
-export function drawData(data) {
-    console.log(data);
-    drawAxis(data);
-    drawLegend(data);
-    drawLine(data)
+export function drawData(medalsData, hostsData) {
+    console.log('medals', medalsData);
+    console.log('hosts', hostsData);
+
+    drawAxis(medalsData);
+    drawLegend(medalsData);
+    drawLine(medalsData);
+    drawPulsingCircles(hostsData);
 }
 
 function drawAxis(data) {
@@ -113,7 +116,7 @@ function drawLegend(data) {
         .domain(nocsRange)
         .range(d3.schemeSet1)
 
-    var legend = svg.selectAll(".legend")
+    const legend = svg.selectAll(".legend")
         .data(nocsRange)
         .enter()
         .append("g")
@@ -138,6 +141,41 @@ function drawLegend(data) {
         .attr("height", 3);
 }
 
+function drawPulsingCircles(data) {
+    data.forEach(function (d) {
+        console.log(d);
+        let circle = svg.append("circle")
+            .attr("cx", xScale(d[0]))
+            .attr("cy", yScale(d[1]))
+            .attr("r", 8)
+            .style("fill", color(d[2]))
+            .style("stroke", color(d[2]))
+            .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
+
+        pulse(circle);
+    })
+
+    function pulse(circle) {
+        (function repeat() {
+            circle
+                .transition()
+                .duration(200)
+                .attr("stroke-width", 0)
+                .attr('stroke-opacity', 0)
+                .transition()
+                .duration(200)
+                .attr("stroke-width", 0)
+                .attr('stroke-opacity', 0.5)
+                .transition()
+                .duration(800)
+                .attr("stroke-width", 40)
+                .attr('stroke-opacity', 0)
+                .ease(d3.easeSin)
+                .on("end", repeat);
+        })();
+    }
+}
+
 function drawLine(data) {
     console.log(data)
     const dataGroups = d3.group(data, d => d[2]);
@@ -146,27 +184,12 @@ function drawLine(data) {
     // Line Generator
     const line = d3.line()
         .x(function (d) {
-            console.log(d[0]);
             return xScale(d[0]);
         })
         .y(function (d) {
-            console.log(d[1]);
             return yScale(d[1]);
         })
         .curve(d3.curveMonotoneX)
-
-    // Line for each NOC
-    dataGroups.forEach(function (d, g) {
-        console.log(g, d)
-        svg.append("path")
-            .datum(d)
-            .attr("class", "line")
-            .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-            .attr("d", line)
-            .attr("stroke", color(g))
-            .style("fill", "none")
-            .style("stroke-width", "2")
-    });
 
     // Line Dots
     svg.selectAll(".circle")
@@ -174,6 +197,9 @@ function drawLine(data) {
         .data(data)
         .enter()
         .append("circle")
+        .attr("id", function (d) {
+            return d[2];
+        })
         .attr("cx", function (d) {
             return xScale(d[0]);
         })
@@ -182,8 +208,40 @@ function drawLine(data) {
         })
         .attr("r", 5)
         .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-        .style("fill", function (d) {
-            console.log(d[2])
-            return color(d[2]);
-        });
+        .attr('stroke', d => color(d[2]))
+        .attr('stroke-opacity', 0.5)
+        .attr('fill-opacity', 0.5)
+        .style("fill", d => color(d[2]));
+
+    // Line for each NOC
+    dataGroups.forEach(function (d, g) {
+        console.log(g, d)
+        svg.append("path")
+            .datum(d)
+            .attr("class", "line")
+            .attr("id", function (d) {
+                return d[0][2];
+            })
+            .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
+            .attr("d", line)
+            .attr("stroke", color(g))
+            .style("fill", "none")
+            .style("stroke-width", "4")
+            .attr('stroke-opacity', 0.5)
+            .on("mouseover", function (d, i) {
+                const id = d3.select(this).attr('id')
+                d3.selectAll("#"+id).transition()
+                    .duration('50')
+                    .attr('stroke-opacity', 1)
+                    .attr('fill-opacity', 1);
+            })
+            .on("mouseout", function (d, i) {
+                const id = d3.select(this).attr('id')
+                d3.selectAll("#"+id).transition()
+                    .duration('50')
+                    .attr('stroke-opacity', 0.5)
+                    .attr('fill-opacity', 0.5);
+            })
+
+    });
 }
