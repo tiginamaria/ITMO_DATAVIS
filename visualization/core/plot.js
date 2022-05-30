@@ -142,8 +142,8 @@ function drawLegend(data) {
 }
 
 function drawPulsingCircles(data) {
+
     data.forEach(function (d) {
-        console.log(d);
         let circle = svg.append("circle")
             .attr("cx", xScale(d[0]))
             .attr("cy", yScale(d[1]))
@@ -151,8 +151,20 @@ function drawPulsingCircles(data) {
             .style("fill", color(d[2]))
             .style("stroke", color(d[2]))
             .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
-
+            .text(function (d) {
+                return d;
+            });
         pulse(circle);
+    })
+
+    data.forEach(function (d) {
+        console.log('text', d);
+        svg.append("text")
+            .attr("x", xScale(d[0]) + 10)
+            .attr("y", yScale(d[1]) - 10)
+            .attr("dy", ".35em")
+            .attr("transform", `translate(${H_MARGIN}, ${V_MARGIN})`)
+            .text(`${d[3]}, ${d[4]}, ${d3.timeFormat("%Y")(d[0])}`);
     })
 
     function pulse(circle) {
@@ -230,14 +242,14 @@ function drawLine(data) {
             .attr('stroke-opacity', 0.5)
             .on("mouseover", function (d, i) {
                 const id = d3.select(this).attr('id')
-                d3.selectAll("#"+id).transition()
+                d3.selectAll("#" + id).transition()
                     .duration('50')
                     .attr('stroke-opacity', 1)
                     .attr('fill-opacity', 1);
             })
             .on("mouseout", function (d, i) {
                 const id = d3.select(this).attr('id')
-                d3.selectAll("#"+id).transition()
+                d3.selectAll("#" + id).transition()
                     .duration('50')
                     .attr('stroke-opacity', 0.5)
                     .attr('fill-opacity', 0.5);
